@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign up - ClosetAssist</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <!-- FAVICON -->
+    <link rel="icon" href="slike/ClosetAssist-transformed.png" />
+  </head>
+  <body>
+    <section class="logRegSection">
+      <div class="containerLogReg">
+        <div class="login-container">
+          <div class="login-wrapper">
+            <h2>Sign up</h2>
+            <p class="sub-heading">Please fill up the required fields.</p>
+            <label class="loginLbl" for="nameInp">Full name</label>
+            <input type="text" name="nameInp" id="nameInp" />
+            <label class="loginLbl" for="emailInp">Email</label>
+            <input type="text" name="emailInp" id="emailInp" />
+            <label class="loginLbl" for="userInp">Username</label>
+            <input type="text" id="userInp" name="userInp" />
+            <label class="loginLbl" for="passInp">Password</label>
+            <input type="password" name="passInp" id="passInp" />
+            <button class="signup-btn" type="text" id="sub_btn">Sign up</button>
+            <a href="login.html">Already have an account?</a>
+          </div>
+          <!-- <div class="img-container">
+            <img
+              class="login-img"
+              src="/slike/alexandru-acea-T5jXjei49uY-unsplash.jpg"
+              alt=""
+            />
+          </div> -->
+        </div>
+      </div>
+    </section>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBEr7B_GP1HeBCqVsof8kd-PNcCIp7KW6c",
+        authDomain: "waiterassist-71fb0.firebaseapp.com",
+        databaseURL:
+          "https://waiterassist-71fb0-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "waiterassist-71fb0",
+        storageBucket: "waiterassist-71fb0.appspot.com",
+        messagingSenderId: "397401148253",
+        appId: "1:397401148253:web:bde2dc9d7ee5a5d27cf6b4",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      import {
+        getDatabase,
+        ref,
+        set,
+        child,
+        get,
+      } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
+      const db = getDatabase();
+
+      // ------------------------------ Spremenljive za Register --------------------------//
+      const name = document.getElementById("nameInp");
+      const email = document.getElementById("emailInp");
+      const username = document.getElementById("userInp");
+      const pass = document.getElementById("passInp");
+      const submit = document.getElementById("sub_btn");
+
+      // ------------------------------ Validacija --------------------------//
+      function isEmptyOrSpaces(str) {
+        return str === null || str.match(/^ *$/) !== null;
+      }
+
+      function Validation() {
+        let nameregex = /^[a-zA-Z\s]+$/;
+        let emailregex = /^[a-zA-z0-9]+@(gmail|yahoo)\.com$/;
+        let userregex = /^[a-zA-Z0-9]{5,}$/;
+
+        if (
+          isEmptyOrSpaces(name.value) ||
+          isEmptyOrSpaces(email.value) ||
+          isEmptyOrSpaces(username.value) ||
+          isEmptyOrSpaces(pass.value)
+        ) {
+          alert("You cannot leave empty fields.");
+          return false;
+        }
+        if (!nameregex.test(name.value)) {
+          alert("The name should only contain letters.");
+          return false;
+        }
+
+        if (!emailregex.test(email.value)) {
+          alert("Please enter a valid email address");
+          return false;
+        }
+
+        if (!userregex.test(username.value)) {
+          alert(`Username can only be alphanumerical.
+          Username must be atleast 5 characters long
+          Username cannot contain spaces.`);
+          return false;
+        }
+        return true;
+      }
+
+      // ------------------------------ Registriranje uporabnika na Firebase platformo--------------------------//
+      function RegisterUser() {
+        if (!Validation()) {
+          return;
+        }
+        const dbRef = ref(db);
+
+        get(child(dbRef, "UsersList/" + username.value)).then((snapshot) => {
+          if (snapshot.exists()) {
+            alert("Account Already Exists!");
+          } else {
+            set(ref(db, "UsersList/" + username.value), {
+              fullname: name.value,
+              email: email.value,
+              username: username.value,
+              password: encPass(),
+            })
+              .then(() => {
+                alert("User added successfully. ");
+                window.location = "login.html";
+              })
+              .catch((error) => {
+                alert("error" + error);
+              });
+          }
+        });
+      }
+
+      // ------------------------------ Enkripcija gesla--------------------------//
+      function encPass() {
+        var pass12 = CryptoJS.AES.encrypt(pass.value, pass.value);
+        return pass12.toString();
+      }
+      // ------------------------------ Doloci dogodke--------------------------//
+      submit.addEventListener("click", RegisterUser);
+    </script>
+  </body>
+</html>

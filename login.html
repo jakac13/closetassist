@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log in - ClosetAssist</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <!-- FAVICON -->
+    <link rel="icon" href="slike/ClosetAssist-transformed.png" />
+  </head>
+  <body>
+    <section class="logRegSection">
+      <div class="containerLogReg">
+        <div class="login-container">
+          <div class="login-wrapper">
+            <h2>Log in</h2>
+            <p class="sub-heading">Make your life easier.</p>
+            <label class="loginLbl" for="userInp">Username</label>
+            <input type="text" id="userInp" name="userInp" />
+            <label class="loginLbl" for="passInp">Password</label>
+            <input type="password" name="passInp" id="passInp" />
+            <div class="switch-wrapper">
+              <input
+                class="switch-input"
+                type="checkbox"
+                id="switchLogIn"
+                checked
+              /><label class="switch-lbl" for="switchLogIn"
+                >Keep me Logged in</label
+              >
+            </div>
+            <button class="signup-btn" type="text" id="sub_btn">Log in</button>
+            <a href="register.html">Wan't To Create An Account?</a>
+          </div>
+          <!-- <div class="img-container">
+            <img
+              class="login-img"
+              src="/slike/alexandru-acea-T5jXjei49uY-unsplash.jpg"
+              alt=""
+            />
+          </div> -->
+        </div>
+      </div>
+    </section>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBEr7B_GP1HeBCqVsof8kd-PNcCIp7KW6c",
+        authDomain: "waiterassist-71fb0.firebaseapp.com",
+        databaseURL:
+          "https://waiterassist-71fb0-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "waiterassist-71fb0",
+        storageBucket: "waiterassist-71fb0.appspot.com",
+        messagingSenderId: "397401148253",
+        appId: "1:397401148253:web:bde2dc9d7ee5a5d27cf6b4",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      import {
+        getDatabase,
+        ref,
+        set,
+        child,
+        get,
+      } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
+      const db = getDatabase();
+
+      // ------------------------------ Spremenljive za Login --------------------------//
+      const username = document.getElementById("userInp");
+      const pass = document.getElementById("passInp");
+      const submit = document.getElementById("sub_btn");
+
+      // ------------------------------ Validacija --------------------------//
+      function AuthenticateUser() {
+        if (!pass.value) {
+          alert("Enter the password!");
+          return false;
+        }
+        const dbref = ref(db);
+
+        get(child(dbref, "UsersList/" + username.value)).then((snapshot) => {
+          if (snapshot.exists()) {
+            let dbpass = decPass(snapshot.val().password);
+            if (dbpass == pass.value) {
+              login(snapshot.val());
+            } else {
+              alert("Invalid password!");
+              return false;
+            }
+          } else {
+            alert("Username or password is invalid");
+            return false;
+          }
+        });
+      }
+
+      // ------------------------------ Dekripcija gesla --------------------------//
+      function decPass(dbpass) {
+        var pass12 = CryptoJS.AES.decrypt(dbpass, pass.value);
+        return pass12.toString(CryptoJS.enc.Utf8);
+      }
+
+      // ------------------------------ Login --------------------------//
+      function login(user) {
+        let keepLoggedIn = document.getElementById("switchLogIn").checked;
+
+        if (!keepLoggedIn) {
+          sessionStorage.setItem("user", JSON.stringify(user));
+          window.location = "home.html";
+        } else {
+          localStorage.setItem("keepLoggedIn", "yes");
+          localStorage.setItem("user", JSON.stringify(user));
+          window.location = "home.html";
+        }
+      }
+
+      // ------------------------------ Doloci dogodke--------------------------//
+      submit.addEventListener("click", AuthenticateUser);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClosetAssist - Landing Page</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- FAVICON -->
+    <link rel="icon" href="slike/ClosetAssist-transformed.png" />
+  </head>
+  <body>
+    <nav class="menu-container">
+      <div class="menu-wrapper">
+        <!-- <input type="checkbox" aria-label="Toggle menu" />
+        <span></span>
+        <span></span>
+        <span></span> -->
+
+        <a href="#" class="menu-logo"
+          >ClosetAssist
+          <!-- <img
+            src="/slike/ClosetAssist-transformed.png"
+            alt="WaiterAssist Logo"
+          /> -->
+        </a>
+
+        <!-- menu items -->
+        <div class="menu">
+          <ul>
+            <li>
+              <!-- <a class="nav-link" href="#home.html"> Home </a> -->
+            </li>
+          </ul>
+
+          <ul class="nav-form-list">
+            <li>
+              <a class="nav-link" id="userlink" href="#home"> Username </a>
+            </li>
+            <li>
+              <a class="nav-link" id="signoutlink" href="#docs"> Sign out </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class="main-dashboard landing-bg">
+      <div class="main-container landing">
+        <img class="landing-img" src="slike/Dressing room.gif" alt="" />
+        <div class="content-wrapper landing-wrapper">
+          <h1>Welcome to <span>C</span>loset<span>A</span>ssist</h1>
+          <h3 id="welcome-msg">Track your wardrobe easier.</h3>
+          <div class="landing-login-wrapper">
+            <a class="nav-btn-user" href="register.html">Create An Account</a>
+            <a class="nav-btn-login" href="login.html">Log in</a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      // ------------------------------ Spremenljivke za Home --------------------------//
+      let userlink = document.getElementById("userlink");
+      let signoutlink = document.getElementById("signoutlink");
+      let header = document.getElementById("hh");
+      let msg = document.getElementById("welcome-msg");
+      var currentUser = null;
+
+      // ------------------------------ Funkcije --------------------------//
+      function getUsername() {
+        let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+
+        if (keepLoggedIn == "yes") {
+          currentUser = JSON.parse(localStorage.getItem("user"));
+        } else {
+          currentUser = JSON.parse(sessionStorage.getItem("user"));
+        }
+      }
+
+      function SignOut() {
+        sessionStorage.removeItem("user");
+        localStorage.removeItem("user");
+        localStorage.removeItem("keepLoggedIn");
+        window.location = "home.html";
+      }
+
+      // ------------------------------ Ko se nalozi Home stran --------------------------//
+      window.onload = function () {
+        getUsername();
+        if (currentUser == null) {
+          userlink.innerText = "Create An Account";
+          userlink.classList.replace("nav-link", "nav-btn-user");
+          userlink.href = "register.html";
+
+          signoutlink.innerText = "Log in";
+          signoutlink.classList.replace("nav-link", "nav-btn-login");
+          signoutlink.href = "login.html";
+        } else {
+          window.location = "home.html";
+        }
+      };
+    </script>
+  </body>
+</html>

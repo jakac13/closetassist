@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - ClosetAssist</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- FAVICON -->
+    <link rel="icon" href="slike/ClosetAssist-transformed.png" />
+
+    <!-- FONTAWESOME ICONS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <nav class="menu-container">
+      <div class="menu-wrapper">
+        <!-- <input type="checkbox" aria-label="Toggle menu" />
+        <span></span>
+        <span></span>
+        <span></span> -->
+
+        <a href="#" class="menu-logo">
+          ClosetAssist
+          <!-- <img
+            src="/slike/ClosetAssist-transformed.png"
+            alt="WaiterAssist Logo"
+          /> -->
+        </a>
+
+        <!-- menu items -->
+        <div class="menu">
+          <ul>
+            <li>
+              <a class="nav-link" href="home.html"> Home </a>
+            </li>
+          </ul>
+
+          <ul class="nav-form-list">
+            <li>
+              <a class="nav-link" id="userlink" href="#home"> Username </a>
+            </li>
+            <li>
+              <a class="nav-link" id="signoutlink" href="#docs"> Sign out </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-dashboard" id="start">
+      <div class="overlay hidden" id="overlay"></div>
+      <div class="main-container">
+        <div class="content-wrapper">
+          <div class="dashboard-buttons">
+            <h1 id="welcome-msg"></h1>
+            <button id="btn-hide-form" class="btn-hide-form">
+              <i class="fa-solid fa-plus"></i> Add New
+            </button>
+            <form id="form" class="add-item-form">
+              <p id="modal-close">X</p>
+              <div class="heading-modal">
+                <i class="fa-solid fa-square-plus"></i>
+                <h2>Add a new item</h2>
+              </div>
+              <div class="form-option">
+                <label class="new-item-lbl" for="name-item"
+                  >Name of the item</label
+                >
+                <input type="text" id="name-item" name="name" maxlength="20" />
+              </div>
+              <div class="form-option">
+                <label class="new-item-lbl" for="category-item"
+                  >Choose item category</label
+                >
+                <select name="category" id="category-item"></select>
+              </div>
+              <div class="form-option">
+                <label class="new-item-lbl" for="image">Add image</label>
+                <input type="file" id="image" name="image" />
+              </div>
+              <div class="form-btn">
+                <a type="cancel" id="item-cancel-btn">Cancel</a>
+                <button type="submit" id="item-add-btn">Add Item</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="profile-info-container">
+            <div class="profile-info-items">
+              <img id="profile-info-img" src="slike/Choosing clothes-bro.png" />
+              <div class="profile-info-items-text">
+                <p>Items stored:</p>
+                <p id="items-number">0</p>
+              </div>
+            </div>
+            <div
+              id="items-washing-container"
+              class="profile-info-washing-items"
+            >
+              <img
+                id="items-washing-img"
+                src="slike/Laundry and dry cleaning-rafiki-washing.png"
+                alt="last-item-img"
+              />
+              <div class="item-name_img">
+                <p>Items washing:</p>
+                <p id="items-washing"></p>
+              </div>
+            </div>
+            <div id="last-item-container" class="profile-info-last-item">
+              <img
+                id="last-item-img"
+                src="slike/1237861.png"
+                alt="last-item-img"
+              />
+              <div class="item-name_img">
+                <p>Newest item:</p>
+                <p id="last-item"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="item-filters">
+            <div class="item-filters-wrapper">
+              <div class="all-items">
+                <input
+                  type="radio"
+                  name="filter"
+                  id="all-only"
+                  checked="checked"
+                />
+                <label
+                  id="filter-all-items"
+                  class="btn-stored-items filter-button-active"
+                  for="all-only"
+                >
+                  <!-- <i class="fa-solid fa-filter"></i>-->
+                  View all
+                </label>
+              </div>
+              <div class="stored-items">
+                <input type="radio" name="filter" id="stored-only" />
+                <label
+                  id="filter-stored-items"
+                  class="btn-stored-items"
+                  for="stored-only"
+                >
+                  <!-- <i class="fa-solid fa-filter"></i>-->
+                  Stored
+                </label>
+              </div>
+              <div class="wash-items">
+                <input type="radio" name="filter" id="wash-only" />
+                <label
+                  id="filter-wash-items"
+                  class="btn-stored-items"
+                  for="wash-only"
+                >
+                  <!-- <i class="fa-solid fa-filter"></i> -->In washing
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- <h2>Items in my closet</h2> -->
+
+          <div class="items-container" id="container"></div>
+          <!-- <a href="#start" class="btn-top" id="btn-top">
+            <i class="fa-solid fa-arrow-up"></i>
+          </a> -->
+        </div>
+        <div class="loader-wrapper" id="loader">
+          <span class="loader"><span class="loader-inner"></span></span>
+        </div>
+      </div>
+    </main>
+
+    <!-- FIREBASE SCRIPTS NEEDED -->
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
+    ></script>
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"
+    ></script>
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+    ></script>
+    <script type="module" src="script.js"></script>
+    <script>
+      // ------------------------------ Spremenljivke za Home --------------------------//
+      let userlink = document.getElementById("userlink");
+      let signoutlink = document.getElementById("signoutlink");
+      let header = document.getElementById("hh");
+      let msg = document.getElementById("welcome-msg");
+      var currentUser = null;
+
+      // ------------------------------ Funkcije --------------------------//
+      function getUsername() {
+        let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+
+        if (keepLoggedIn == "yes") {
+          currentUser = JSON.parse(localStorage.getItem("user"));
+        } else {
+          currentUser = JSON.parse(sessionStorage.getItem("user"));
+        }
+      }
+
+      function SignOut() {
+        sessionStorage.removeItem("user");
+        localStorage.removeItem("user");
+        localStorage.removeItem("keepLoggedIn");
+        window.location = "index.html";
+      }
+      // ------------------------------ Ko se nalozi Home stran --------------------------//
+      window.addEventListener("load", function () {
+        getUsername();
+        if (currentUser == null) {
+          userlink.innerText = "Create New Account";
+          userlink.classList.replace("nav-link", "nav-btn-user");
+          userlink.href = "register.html";
+          window.location = "index.html";
+
+          signoutlink.innerText = "Login";
+          signoutlink.classList.replace("nav-link", "nav-btn-login");
+          signoutlink.href = "login.html";
+        } else {
+          userlink.innerText = currentUser.username;
+          //userlink.style.color = "var(--clr-btn)";
+          userlink.classList.replace("nav-btn-user", "nav-link");
+          msg.innerText = `Welcome ${currentUser.username}`;
+          //userlink.classList.replace("nav-link", "btn");
+          userlink.href = "profile.html";
+
+          signoutlink.innerText = "Sign out";
+          signoutlink.classList.replace("nav-btn-login", "nav-link");
+          signoutlink.href = "javascript:SignOut()";
+        }
+      });
+    </script>
+  </body>
+</html>

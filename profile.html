@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account - ClosetAssist</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- FAVICON -->
+    <link rel="icon" href="slike/ClosetAssist-transformed.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <nav class="menu-container">
+      <div class="menu-wrapper">
+        <!-- <input type="checkbox" aria-label="Toggle menu" />
+          <span></span>
+          <span></span>
+          <span></span> -->
+
+        <a href="home.html" class="menu-logo"
+          >ClosetAssist
+          <!-- <img
+            src="/slike/ClosetAssist-transformed.png"
+            alt="WaiterAssist Logo"
+          /> -->
+        </a>
+
+        <!-- menu items -->
+        <div class="menu">
+          <ul>
+            <li>
+              <a class="nav-link" href="home.html"> Home </a>
+            </li>
+          </ul>
+
+          <ul class="nav-form-list">
+            <li>
+              <a class="nav-link" id="userlink" href="#home"> Username </a>
+            </li>
+            <li>
+              <a class="nav-link" id="signoutlink" href="#docs"> Sign out </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-dashboard profile-dashboard">
+      <div class="account-info">
+        <h2>Account Information</h2>
+        <div class="information-wrapper">
+          <p>Email: <span id="account-email">/</span></p>
+          <p>Full Name: <span id="account-full-name">/</span></p>
+          <p>Username: <span id="account-username">/</span></p>
+        </div>
+      </div>
+      <div class="loader-wrapper" id="loader">
+        <span class="loader"><span class="loader-inner"></span></span>
+      </div>
+    </div>
+
+    <!-- FIREBASE SCRIPTS NEEDED -->
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
+    ></script>
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"
+    ></script>
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+    ></script>
+
+    <script type="module">
+      //----------------Firebase initialize----------------------------------//
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBEr7B_GP1HeBCqVsof8kd-PNcCIp7KW6c",
+        authDomain: "waiterassist-71fb0.firebaseapp.com",
+        databaseURL:
+          "https://waiterassist-71fb0-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "waiterassist-71fb0",
+        storageBucket: "waiterassist-71fb0.appspot.com",
+        messagingSenderId: "397401148253",
+        appId: "1:397401148253:web:bde2dc9d7ee5a5d27cf6b4",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      import {
+        getDatabase,
+        ref,
+        set,
+        child,
+        get,
+        update,
+        remove,
+        push,
+      } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+
+      const db = getDatabase();
+
+      // ------------------------------ Spremenljivke za Account Info --------------------------//
+      const containerEmail = document.getElementById("account-email");
+      const containerFullName = document.getElementById("account-full-name");
+      const containerUsername = document.getElementById("account-username");
+
+      function loadAccountData() {
+        let counter = 0;
+        const dbref = ref(db);
+        get(child(dbref, "UsersList/" + currentUser.username))
+          .then((snapshot) => {
+            containerEmail.textContent = snapshot.val().email;
+            containerFullName.textContent = snapshot.val().fullname;
+            containerUsername.textContent = snapshot.val().username;
+          })
+          .then(
+            setTimeout(function () {
+              loader.classList.add("loader-hidden");
+            }, 500)
+          );
+      }
+
+      window.addEventListener("load", function () {
+        loadAccountData();
+      });
+    </script>
+    <script>
+      // ------------------------------ Spremenljivke za Profile --------------------------//
+      let userlink = document.getElementById("userlink");
+      let signoutlink = document.getElementById("signoutlink");
+      let header = document.getElementById("hh");
+      var currentUser = null;
+
+      // ------------------------------ Funkcije --------------------------//
+      function getUsername() {
+        let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+
+        if (keepLoggedIn == "yes") {
+          currentUser = JSON.parse(localStorage.getItem("user"));
+        } else {
+          currentUser = JSON.parse(sessionStorage.getItem("user"));
+        }
+      }
+
+      function SignOut() {
+        sessionStorage.removeItem("user");
+        localStorage.removeItem("user");
+        localStorage.removeItem("keepLoggedIn");
+        window.location = "index.html";
+      }
+      // ------------------------------ Ko se nalozi Home stran --------------------------//
+      window.addEventListener("load", function () {
+        getUsername();
+        if (currentUser == null) {
+          window.location = "index.html";
+        } else {
+          userlink.innerText = currentUser.username;
+          //userlink.style.color = "var(--clr-btn)";
+          userlink.classList.replace("nav-btn-user", "nav-link");
+          //userlink.classList.replace("nav-link", "btn");
+          userlink.href = "profile.html";
+
+          signoutlink.innerText = "Sign out";
+          signoutlink.classList.replace("nav-btn-login", "nav-link");
+          signoutlink.href = "javascript:SignOut()";
+        }
+      });
+    </script>
+  </body>
+</html>
